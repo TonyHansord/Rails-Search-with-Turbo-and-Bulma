@@ -3,7 +3,11 @@ class GroceriesController < ApplicationController
 
   # GET /groceries or /groceries.json
   def index
-    @groceries = Grocery.all
+    if params[:query].present?
+      @groceries = Grocery.where("name LIKE ?", "%#{params[:query]}%")
+    else
+      @groceries = Grocery.all
+    end
   end
 
   # GET /groceries/1 or /groceries/1.json
