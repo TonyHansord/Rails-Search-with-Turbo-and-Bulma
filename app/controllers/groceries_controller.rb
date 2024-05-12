@@ -3,8 +3,10 @@ class GroceriesController < ApplicationController
 
   # GET /groceries or /groceries.json
   def index
-    if params[:query].present?
-      @groceries = Grocery.where("name LIKE ?", "%#{params[:query]}%")
+
+    @query = params[:query]
+    if @query.present?
+      @groceries = Grocery.where("name LIKE ?", "%#{@query}%")
     else
       @groceries = Grocery.all
     end
@@ -37,6 +39,17 @@ class GroceriesController < ApplicationController
       end
     end
   end
+
+  def add_from_search
+
+    if params[:name].present?
+  
+     @grocery = Grocery.create(name: params[:name])
+      redirect_to groceries_url(@grocery)
+      else
+        redirect_to groceries_url, alert: "Grocery name cannot be blank"
+      end
+    end
 
   # PATCH/PUT /groceries/1 or /groceries/1.json
   def update
